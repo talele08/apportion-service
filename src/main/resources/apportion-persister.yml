@@ -1,0 +1,48 @@
+serviceMaps:
+ serviceName: apportion-services
+ mappings:
+ - version: 1.0
+   description: Persists apportioning request
+   fromTopic: save-apportion-request
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_appr_bills_request(billId,tenantid,mobileNumber,billInfo,createdBy,createdTime) VALUES (?,?,?,?,?,?)
+         jsonMaps:
+          - jsonPath: $.Bills.*.billId
+
+          - jsonPath: $.Bills.*.tenantId
+
+          - jsonPath: $.Bills.*.mobileNumber
+
+          - jsonPath: $.Bills[?(@.id == {billId})]
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Bills.*.createdBy
+
+          - jsonPath: $.Bills.*.createdTime
+
+
+
+ - version: 1.0
+   description: Persists apportioning response
+   fromTopic: save-apportion-response
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_appr_bills_response(billId,tenantid,mobileNumber,billInfo,createdBy,createdTime) VALUES (?,?,?,?,?,?)
+         jsonMaps:
+          - jsonPath: $.Bills.*.billId
+
+          - jsonPath: $.Bills.*.tenantId
+
+          - jsonPath: $.Bills.*.mobileNumber
+
+          - jsonPath: $.Bills[?(@.id == {billId})]
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Bills.*.createdBy
+
+          - jsonPath: $.Bills.*.createdTime
